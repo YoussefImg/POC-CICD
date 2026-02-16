@@ -1,0 +1,23 @@
+name: CI - Docker Build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Code ophalen uit de repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Docker buildx activeren
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Docker image bouwen om te controleren of alles werkt
+      - name: Build Docker image
+        run: docker build -t poc-cicd-app .
