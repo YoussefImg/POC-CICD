@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"status": "ok", "version": "v3", "msg": "deploy test"}
+    return {"status": "Test CI/CD pipeline OK"}
 
 @app.get("/health")
 def health():
