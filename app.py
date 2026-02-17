@@ -10,6 +10,10 @@ def root():
 def testQL():
     return {"CodeQL test"}
 
+@app.get("/test")
+def test():
+    return {"test"}
+
 @app.get("/health")
 def health():
     return {"status" : "Ok from CI/CD"}
