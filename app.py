@@ -5,6 +5,8 @@ app = FastAPI()
 @app.get("/")
 def root():
     return {"status": "Test CI/CD pipeline OK Ok"}
+
+@app.get("/testql")
 def testQL():
     return {"CodeQL test"}
 
