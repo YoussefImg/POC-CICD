@@ -1,4 +1,4 @@
-name: Build & Push Docker image to GHCR + Deploy
+name: Build & Push Docker image to GHCR + Deploy (Self-hosted)
 
 on:
   push:
@@ -36,36 +36,29 @@ jobs:
 
   deploy:
     needs: build-and-push
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Deploy on VM (pull + restart)
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: 22
-          debug: true
-          script_stop: true
-          script: |
-            set -e
-            cd /opt/poc-cicd
+      - name: Deploy locally on VM (pull + restart)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /opt/poc-cicd
 
-            echo "== docker compose version =="
-            docker compose version
+          echo "== docker compose version =="
+          docker compose version
 
-            echo "== pulling new image =="
-            docker compose pull api
+          echo "== pulling new image =="
+          docker compose pull api
 
-            echo "== restarting stack =="
-            docker compose up -d
+          echo "== restarting stack =="
+          docker compose up -d
 
-            echo "== status =="
-            docker compose ps
+          echo "== status =="
+          docker compose ps
 
-            echo "== last logs (api) =="
-            docker compose logs --tail=50 api || true
+          echo "== last logs (api) =="
+          docker compose logs --tail=50 api || true
 
-            echo "== cleanup =="
-            docker image prune -af || true
+          echo "== cleanup =="
+          docker image prune -af || true
